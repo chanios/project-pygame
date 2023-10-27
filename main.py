@@ -15,6 +15,5 @@ def draw():
     engine.draw(screen)
 def update():
     engine.update(pygame)
-pygame.mixer.pre_init(44100, 16, 2, 4096)
 engine.init(music,sounds)
 pgzrun.go()

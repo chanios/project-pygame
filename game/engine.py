@@ -84,8 +84,10 @@ class Engine():
                 e = ENEMY(self)
                 e.set_position(self.player.x + 500 + random.randint(-500,500), self.player.y + random.randint(-500,500))
                 self.enemys.append(e)
+        
         for obj in self.enemys + self.bullets + self.items:
             obj.update()
+    
         if self._tick%20==0:
             cam_x_start = self.camera.x - 200
             cam_y_start = self.camera.y - 200

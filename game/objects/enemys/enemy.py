@@ -43,7 +43,7 @@ class Enemy(GenericObject):
     def draw(self,screen):
         
         sprite = self.game.sprites["star"]
-        rotated_image = pygame.transform.rotate(sprite["image"], self._tick%360)
+        rotated_image = pygame.transform.rotate(sprite["image"], (self._tick*4)%360)
         rotated_rect = rotated_image.get_rect(center=sprite["center"])
         rotated_center = (rotated_rect.width // 2, rotated_rect.height // 2)
         screen.blit(rotated_image, (self.x - self.game.camera.x - rotated_center[0], self.y - self.game.camera.y - rotated_center[1]))
