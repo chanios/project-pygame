@@ -6,8 +6,8 @@ import math
 import random
 
 class Enemy(GenericObject):
-    def __init__(self, game):
-        super().__init__(game)
+    def __init__(self, scene):
+        super().__init__(scene)
         self.current_sprite_state = None
         self.all_actions = []
         self.current_action = None;
@@ -35,22 +35,22 @@ class Enemy(GenericObject):
     def death(self):
         r = random.randint(0,2)
         if r == 0:
-            self.game.sounds.tan0.play()
+            self.scene.engine.sounds.tan0.play()
         elif r == 1:
-            self.game.sounds.tan1.play()
+            self.scene.engine.sounds.tan1.play()
         else:
-            self.game.sounds.tan2.play()
+            self.scene.engine.sounds.tan2.play()
     def draw(self,screen):
         
-        sprite = self.game.sprites["star"]
+        sprite = self.scene.engine.sprites["star"]
         rotated_image = pygame.transform.rotate(sprite["image"], (self._tick*4)%360)
         rotated_rect = rotated_image.get_rect(center=sprite["center"])
         rotated_center = (rotated_rect.width // 2, rotated_rect.height // 2)
-        screen.blit(rotated_image, (self.x - self.game.camera.x - rotated_center[0], self.y - self.game.camera.y - rotated_center[1]))
+        screen.blit(rotated_image, (self.x - self.scene.camera.x - rotated_center[0], self.y - self.scene.camera.y - rotated_center[1]))
         super().draw(screen);
         # screen.draw.filled_rect(Rect(self.x-camera['x']-90,self.y-camera['y']+100,180,5), 'rosybrown')
         # screen.draw.filled_rect(Rect(self.x-camera['x']-90,self.y-camera['y']+100,180,5), 'firebrick')
-        screen.draw.text(str(self.hp)+"/"+str(self.max_hp), (self.x-self.game.camera.x,self.y-self.game.camera.y+105), fontname="joystixmonospace", fontsize=16, color="white")
+        screen.draw.text(str(self.hp)+"/"+str(self.max_hp), (self.x-self.scene.camera.x,self.y-self.scene.camera.y+105), fontname="joystixmonospace", fontsize=16, color="white")
     def damage(self, damage):
         self.hp -= damage
         if self.hp % 10 == 0:
@@ -59,24 +59,24 @@ class Enemy(GenericObject):
             self.death();
     def drop(self, ITEM, amount = 1):
         for i in range(amount):
-            item = ITEM(self.game)
+            item = ITEM(self.scene)
             item.set_position(self.x, self.y)
             item.set_velocity(random.randint(-20,20),random.randint(-20,20))
-            self.game.items.append(item)
+            self.scene.items.append(item)
     def death(self):
         self.drop(PCoinItem,50)
         r = random.randint(0,2)
         if r == 0:
-            self.game.sounds.tan0.play()
+            self.scene.engine.sounds.tan0.play()
         elif r == 1:
-            self.game.sounds.tan1.play()
+            self.scene.engine.sounds.tan1.play()
         else:
-            self.game.sounds.tan2.play()
-        self.game.enemys.remove(self)
+            self.scene.engine.sounds.tan2.play()
+        self.scene.enemys.remove(self)
     def update(self):
         self._tick += 1;
         super().update()
     def new_bullet(self):
-        bullet = Bullet(self.game,'enemy')
-        self.game.bullets.append(bullet)
+        bullet = Bullet(self.scene,'enemy')
+        self.scene.bullets.append(bullet)
         return bullet

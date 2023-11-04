@@ -8,8 +8,8 @@ import random
 import pygame
 
 class KoishiKomeiji(Enemy):
-    def __init__(self, game):
-        super().__init__(game)
+    def __init__(self, scene):
+        super().__init__(scene)
         self.current_sprite_state = None
         self.all_actions = [
             "ATTACK_1",
@@ -30,36 +30,36 @@ class KoishiKomeiji(Enemy):
         super().draw(screen)
         if self.current_action == "ATTACK_7":
             for y in [self.y-50,self.y+50]:
-                sprite = self.game.sprites["star_small"]
+                sprite = self.scene.engine.sprites["star_small"]
                 rotated_image = pygame.transform.rotate(sprite["image"], (self._tick/5)%360)
                 rotated_rect = rotated_image.get_rect(center=sprite["center"])
                 rotated_center = (rotated_rect.width // 2, rotated_rect.height // 2)
-                screen.blit(rotated_image, (self.x - self.game.camera.x - rotated_center[0], y - self.game.camera.y - rotated_center[1]))
+                screen.blit(rotated_image, (self.x - self.scene.camera.x - rotated_center[0], y - self.scene.camera.y - rotated_center[1]))
     def update(self):
         sprite = spite_maps["koishi_komeiji_idle"]
         if self._tick % 300 == 0:
             if self.current_action == None:
                 self.current_action = self.all_actions[random.randint(0,len(self.all_actions)-1)]
             else:
-                dx, dy = get_direction_to([self.x,self.y],[self.game.player.x+random.randint(-100,100),self.game.player.y+random.randint(-100,100)])
+                dx, dy = get_direction_to([self.x,self.y],[self.scene.player.x+random.randint(-100,100),self.scene.player.y+random.randint(-100,100)])
                 self.velocity_x = dx*random.randint(20,100)
                 self.velocity_y = dy*random.randint(20,100)
                 self.current_action = None
         if self._tick % 4 == 0:
             if self.current_action:
-                self.game.sounds.ok00.play()
+                self.scene.engine.sounds.ok00.play()
             if self.current_action == "ATTACK_1":
 
                 b = self.new_bullet()
                 b.set_position(self.x,self.y)
-                dx, dy = get_direction_to([b.x,b.y],[self.game.player.x,self.game.player.y])
+                dx, dy = get_direction_to([b.x,b.y],[self.scene.player.x,self.scene.player.y])
                 b.set_sprite('bullet_red')
                 b.set_velocity(dx*30, dy*30)
             elif self.current_action == "ATTACK_2":
                 for y in [self.y+100,self.y-100]:
                     b = self.new_bullet()
                     b.set_position(self.x, y)
-                    dx, dy = get_direction_to([b.x,b.y],[self.game.player.x,self.game.player.y])
+                    dx, dy = get_direction_to([b.x,b.y],[self.scene.player.x,self.scene.player.y])
                     b.set_sprite('bullet_red')
                     b.set_velocity(dx*30, dy*30)
 
@@ -72,7 +72,6 @@ class KoishiKomeiji(Enemy):
             elif self.current_action == "ATTACK_6":
                 self.spawn_bullets_around(18,( 0 if (self._tick // 16) % 2 == 0 else 1.57)+(self._tick/1000))
             elif self.current_action == "ATTACK_7":
-                
                 b = self.new_bullet()
                 b.set_position(self.x, self.y-50)
                 b.set_sprite('bullet_red')

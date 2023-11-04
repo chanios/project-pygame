@@ -12,6 +12,10 @@ spite_maps = {
         "loop": "sprite_group_17",
         "end": "sprite_group_15"
     },
+    "player_timeout": {
+        "start": "sprite_group_82",
+        "loop": "sprite_group_83"
+    },
     "koishi_komeiji_idle": {
         "start": "sprite_group_6",
         "loop": "sprite_group_5",

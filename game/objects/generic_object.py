@@ -1,8 +1,8 @@
 from game.utils import get_distance
 
 class GenericObject:
-    def __init__(self, game):
-        self.game = game
+    def __init__(self, scene):
+        self.scene = scene
 
         self.x = 0
         self.y = 0
@@ -20,6 +20,7 @@ class GenericObject:
         self.offset_render_x = 0
         self.playing_sprite = 0
         self.sprites_len = 0
+        self.sprites = None
         self.sprite_queue = []
     def set_f(self,f):
         self.f = f
@@ -72,14 +73,14 @@ class GenericObject:
         return;
     def draw(self, screen):
         if self.sprites:
-            sprite = self.game.sprites[self.sprites[self.playing_sprite]]
+            sprite = self.scene.engine.sprites[self.sprites[self.playing_sprite]]
             if self.rotate_angle:
                 rotated_image = pygame.transform.rotate(sprite["image"], self.rotate_angle)
                 rotated_rect = rotated_image.get_rect(center=sprite["center"])
                 rotated_center = (rotated_rect.width // 2, rotated_rect.height // 2)
-                screen.blit(rotated_image, ((self.x + self.offset_render_x) - self.game.camera.x - rotated_center[0], self.y - self.game.camera.y - rotated_center[1]))
+                screen.blit(rotated_image, ((self.x + self.offset_render_x) - self.scene.camera.x - rotated_center[0], self.y - self.scene.camera.y - rotated_center[1]))
             else:
-                screen.blit(sprite["image"], ((self.x + self.offset_render_x) - self.game.camera.x - sprite["center"][0], self.y - self.game.camera.y - sprite["center"][1]))
+                screen.blit(sprite["image"], ((self.x + self.offset_render_x) - self.scene.camera.x - sprite["center"][0], self.y - self.scene.camera.y - sprite["center"][1]))
             self.d_i += 1
             if self.d_i % 7 == 0:
                 self.playing_sprite = (self.playing_sprite + 1) % self.sprites_len
@@ -87,6 +88,6 @@ class GenericObject:
                     self.end_playing_sprite()
     def load_sprite(self,sprite):
         if sprite.startswith('sprite_group_'):
-            return list(sorted(filter(lambda f: f.startswith(sprite+"_"), self.game.sprites), key=lambda f: int(f.split("_")[-1])))
+            return list(sorted(filter(lambda f: f.startswith(sprite+"_"), self.scene.engine.sprites), key=lambda f: int(f.split("_")[-1])))
         else:
             return [sprite]
