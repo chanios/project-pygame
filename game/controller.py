@@ -16,4 +16,3 @@ class Controller():
     def update_mouse_pos(self, pos):
         self.mouse['x'] = pos[0];
         self.mouse['y'] = pos[1];
-    

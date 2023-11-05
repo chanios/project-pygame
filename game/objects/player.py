@@ -32,9 +32,9 @@ class Player(GenericObject):
             self.velocity_y = -self.velocity_y / self.f
     def draw(self, screen):
         super().draw(screen);
-        sprite = self.scene.engine.sprites["bullet_blue_small"]
         if self.shield > 0 and self.shield % 2 == 0:
             return;
+        sprite = self.scene.engine.sprites["bullet_blue_small"]
         screen.blit(sprite["image"], (self.x - self.scene.camera.x - sprite["center"][0], self.y - self.scene.camera.y - sprite["center"][1]))
     
     def damage(self,dmg):

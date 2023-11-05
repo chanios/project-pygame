@@ -20,13 +20,14 @@ class GameScene(Scene):
         self.game_over = None
         self.camera = Camera(self.engine.HALF_WIDTH, self.engine.HALF_HEIGHT, 0, 50)
         self.pause = False
-    def init(self,background,enemys):
+    def init(self,background,enemys,music="game-1"):
         self.enemys_list = enemys
         self.background = background
         self.player = Player(self)
         self.setup_scene()
-        self.engine.music.play("game-1")
         self.pause = False
+        
+        self.engine.music.play(music)
     def setup_scene(self):
         self.enemys = []
         self.bullets = []
@@ -105,7 +106,7 @@ class GameScene(Scene):
                 self.pause = False
             if key == pygame.K_m:
                 self.engine.change_scene('CHAPTHER_SELECTER')
-        if self.game_over:
+        elif self.game_over:
             if key == pygame.K_m:
                 self.engine.change_scene('CHAPTHER_SELECTER')
             if key == pygame.K_r:
